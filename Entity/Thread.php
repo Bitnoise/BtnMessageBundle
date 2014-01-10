@@ -30,9 +30,9 @@ abstract class Thread extends Base
     /**
      * @abstract set ManyToMany mapping to user entity
      *
-     * @ORM\JoinTable(name="thread_participants",
-     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="thread_id", referencedColumnName="id")}
+     * @ORM\JoinTable(name="thread_user",
+     *      joinColumns={@ORM\JoinColumn(name="thread_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")}
      * )
      */
     protected $participants;
@@ -128,6 +128,18 @@ abstract class Thread extends Base
     {
         if (!$this->isParticipant($participant)) {
             $this->participants->add($participant);
+        }
+    }
+
+    /**
+     * Remove participent from thread
+     *
+     * @param UserInterface $user
+     */
+    public function removeParticipant(UserInterface $user)
+    {
+        if ($this->isParticipant($user)) {
+            $this->participants->removeElement($user);
         }
     }
 
