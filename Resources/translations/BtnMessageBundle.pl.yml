@@ -1,0 +1,5 @@
+form:
+    subject: "Temat"
+    body: "Wiadomość"
+    type: "Rodzaj wiadomości"
+    send: "Wyślij wiadomość"
