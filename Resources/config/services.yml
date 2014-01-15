@@ -6,6 +6,8 @@ services:
             - %btn_message.message_class%
             - @btn_message.thread_manager
             - %btn_message.message_type%
+        calls:
+            - [setEventDispacher, ["@event_dispatcher"]]
     btn_message.thread_manager.default:
         class: Btn\MessageBundle\Model\ThreadManager
         arguments:

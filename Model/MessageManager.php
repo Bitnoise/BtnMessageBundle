@@ -9,6 +9,10 @@ use Btn\MessageBundle\Entity\Metadata;
 use FOS\UserBundle\Model\UserInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
+use Btn\MessageBundle\MessageEvents;
+use Btn\MessageBundle\Event\MessageEvent;
 
 class MessageManager
 {
@@ -38,6 +42,16 @@ class MessageManager
     protected $messageType;
 
     /**
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    protected $container;
+
+    /**
+     * @var \Symfony\Component\EventDispatcher\EventDispatcher
+     */
+    protected $eventDispacher;
+
+    /**
      * @param EntityManager $em
      * @param string        $entityName
      * @param ThreadManager $tm
@@ -50,6 +64,22 @@ class MessageManager
         $this->entityName = $em->getClassMetadata($entityName)->name;
         $this->tm         = $tm;
         $this->messageType = $messageType;
+    }
+
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    public function setContainer(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     * @param \Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher
+     */
+    public function setEventDispacher(ContainerAwareEventDispatcher $eventDispacher)
+    {
+        $this->eventDispacher = $eventDispacher;
     }
 
     /**
@@ -124,6 +154,11 @@ class MessageManager
         // save thread and message
         $this->tm->saveThread($thread, false);
         $this->saveMessage($message);
+
+        if ($this->eventDispacher) {
+            $event = new MessageEvent($message);
+            $this->eventDispacher->dispach(MessageEvents::MESSAGE_SEND, $event);
+        }
 
         return $message;
     }
