@@ -156,8 +156,7 @@ class MessageManager
         $this->saveMessage($message);
 
         if ($this->eventDispacher) {
-            $event = new MessageEvent($message);
-            $this->eventDispacher->dispatch(MessageEvents::MESSAGE_SEND, $event);
+            $this->eventDispacher->dispatch(MessageEvents::MESSAGE_SEND, new MessageEvent($message));
         }
 
         return $message;
