@@ -10,7 +10,7 @@ use FOS\UserBundle\Model\UserInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Btn\MessageBundle\MessageEvents;
 use Btn\MessageBundle\Event\MessageEvent;
 
@@ -47,7 +47,7 @@ class MessageManager
     protected $container;
 
     /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcher
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
     protected $eventDispacher;
 
@@ -75,9 +75,9 @@ class MessageManager
     }
 
     /**
-     * @param \Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher
+     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
-    public function setEventDispacher(ContainerAwareEventDispatcher $eventDispacher)
+    public function setEventDispacher(EventDispatcherInterface $eventDispacher)
     {
         $this->eventDispacher = $eventDispacher;
     }
