@@ -38,6 +38,11 @@ abstract class Thread extends Base
     protected $participants;
 
     /**
+     * @ORM\Column(name="unread_count", type="array", nullable=true)
+     */
+    protected $unreadCount;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="is_archive", type="boolean")
@@ -52,6 +57,7 @@ abstract class Thread extends Base
         parent::__construct();
         $this->participants = new ArrayCollection();
         $this->messages     = new ArrayCollection();
+        $this->unreadCount  = array();
     }
 
     /**
@@ -167,15 +173,48 @@ abstract class Thread extends Base
     }
 
     /**
-     * Get is new from last message
      *
-     * @return bool
      */
-    public function isNew()
+    public function getUnreadCount()
     {
-        $lm = $this->getLastMessage();
-        if ($lm && $lm->isNew()) {
-            return true;
+        return $this->unreadCount;
+    }
+
+    /**
+     *
+     */
+    public function setUnreadCount(array $unreadCount)
+    {
+        $this->unreadCount = $unreadCount;
+
+        return $this;
+    }
+
+    /**
+     *
+     */
+    public function getUnreadCountFor(UserInterface $user)
+    {
+        $uc = $this->getUnreadCount();
+        $id = $user->getId();
+
+        return isset($uc[$id]) ? $uc[$id] : null;
+    }
+
+    /**
+     *
+     */
+    public function setUnreadCountFor(UserInterface $user, $unreadCount)
+    {
+        $uc = $this->getUnreadCount();
+        $id = $user->getId();
+        if ($unreadCount > 0) {
+            $uc[$id] = $unreadCount;
+        } elseif (array_key_exists($id, $uc)) {
+            unset($uc[$id]);
         }
+        $this->setUnreadCount($uc);
+
+        return $this;
     }
 }
