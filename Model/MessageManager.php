@@ -393,4 +393,24 @@ class MessageManager
 
         return $query;
     }
+
+    /**
+     * Get unread messages count for user
+     * @param  UserInterface $user
+     * @param  Thread        $thread
+     * @return integer
+     */
+    public function getUserUnreadCount(UserInterface $user, Thread $thread = null)
+    {
+        $query = $this->em->createQuery(
+            "SELECT COUNT(m) FROM $this->entityName m "
+            . " WHERE m.recipient = :user AND m.isNew = true ".($thread ? " AND m.thread = :thread" : '')
+        );
+        $query->setParameter(':user', $user);
+        if ($thread) {
+            $query->setParameter(':thread', $thread);
+        }
+
+        return $query->getSingleScalarResult();
+    }
 }
