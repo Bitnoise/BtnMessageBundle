@@ -283,16 +283,34 @@ class MessageManager
     }
 
     /**
+     *
+     */
+    protected function updateCounter(Message $message)
+    {
+        $thread    = $message->getThread();
+        $recipient = $message->getRecipient();
+        $thread->setUnreadCountFor($recipient, $this->getUserUnreadCount($recipient, $thread));
+        $this->tm->saveThread($thread);
+    }
+
+    /**
      * Mark message as read
      *
      * @param Message $message
      * @param bool    $andFlush
      */
-    public function markMessageAsRead(Message $message, $andFlush = true)
+    public function markMessageAsRead(Message $message, $andFlush = true, $updateCounter = true)
     {
+        if ($updateCounter) {
+            $andFlush = true;
+        }
+
         if ($message->getIsNew()) {
             $message->setIsNew(false);
             $this->saveMessage($message, $andFlush);
+            if ($updateCounter) {
+                $this->updateCounter($message);
+            }
         }
     }
 
@@ -315,9 +333,13 @@ class MessageManager
 
         if ($messages) {
             foreach ($messages as $message) {
-                $this->markMessageAsRead($message, false);
+                $this->markMessageAsRead($message, false, $thread ? false : true);
             }
             $this->em->flush();
+            if ($thread) {
+                $thread->setUnreadCountFor($user, $this->getUserUnreadCount($user, $thread));
+                $this->tm->saveThread($thread);
+            }
         }
     }
 
