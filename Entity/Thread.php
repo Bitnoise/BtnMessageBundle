@@ -92,8 +92,8 @@ abstract class Thread extends Base
 
     /**
      * Get other participant of message
-     * @param  UserInteface $user
-     * @return UserInteface
+     * @param  UserInterface $user
+     * @return UserInterface
      */
     public function getOtherParticipant(UserInterface $user)
     {
@@ -164,5 +164,18 @@ abstract class Thread extends Base
     public function getIsArchive()
     {
         return $this->isArchive;
+    }
+
+    /**
+     * Get is new from last message
+     *
+     * @return bool
+     */
+    public function isNew()
+    {
+        $lm = $this->getLastMessage();
+        if ($lm && $lm->isNew()) {
+            return true;
+        }
     }
 }
