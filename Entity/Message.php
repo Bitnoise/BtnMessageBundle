@@ -273,6 +273,14 @@ abstract class Message extends Base
     }
 
     /**
+     * Check if message is new for user
+     */
+    public function isNewFor(UserInterface $user)
+    {
+        return $this->isNew() && $this->isRecipient($user);
+    }
+
+    /**
      * Set metadata
      *
      * @param  Metadata $metadata
