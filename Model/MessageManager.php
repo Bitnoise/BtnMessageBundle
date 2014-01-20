@@ -290,8 +290,10 @@ class MessageManager
      */
     public function markMessageAsRead(Message $message, $andFlush = true)
     {
-        $message->setIsNew(false);
-        $this->saveMessage($message, $andFlush);
+        if ($message->getIsNew()) {
+            $message->setIsNew(false);
+            $this->saveMessage($message, $andFlush);
+        }
     }
 
     /**
