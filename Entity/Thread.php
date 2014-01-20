@@ -177,7 +177,7 @@ abstract class Thread extends Base
      */
     public function getUnreadCount()
     {
-        return $this->unreadCount;
+        return is_array($this->unreadCount) ? $this->unreadCount : array();
     }
 
     /**

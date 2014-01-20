@@ -150,6 +150,7 @@ class MessageManager
         $thread->setBody($message->getBody());
         $thread->setType($message->getType());
         $thread->updated();
+        $thread->setUnreadCountFor($user, $this->getUserUnreadCount($message->getRecipient(), $thread) + 1);
 
         // save thread and message
         $this->tm->saveThread($thread, false);
