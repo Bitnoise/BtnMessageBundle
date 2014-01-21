@@ -56,6 +56,11 @@ abstract class Message extends Base
     protected $isNew = true;
 
     /**
+     * @var boolean
+     */
+    protected $wasNew;
+
+    /**
      * @var Metadata
      *
      * @ORM\Column(name="metadata", type="object", nullable=true)
@@ -249,6 +254,8 @@ abstract class Message extends Base
      */
     public function setIsNew($isNew)
     {
+        $this->getWasNew(); //update info before change state
+
         $this->isNew = $isNew;
 
         return $this;
@@ -278,6 +285,34 @@ abstract class Message extends Base
     public function isNewFor(UserInterface $user)
     {
         return $this->isNew() && $this->isRecipient($user);
+    }
+
+    /**
+     * get was message new, keeps information
+     */
+    public function getWasNew()
+    {
+        if (is_null($this->wasNew)) {
+            $this->wasNew = $this->getIsNew();
+        }
+
+        return $this->wasNew;
+    }
+
+    /**
+     * Alias for getWasNew method
+     */
+    public function wasNew()
+    {
+        return $this->getWasNew();
+    }
+
+    /**
+     * Check if message was new for user
+     */
+    public function wasNewFor(UserInterface $user)
+    {
+        return $this->wasNew() && $this->isRecipient($user);
     }
 
     /**
