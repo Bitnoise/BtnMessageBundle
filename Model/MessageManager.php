@@ -151,11 +151,13 @@ class MessageManager
         $thread->setType($message->getType());
         $thread->updated();
         $recipient = $message->getRecipient();
-        $thread->setUnreadCountFor($recipient, $this->getUserUnreadCount($recipient, $thread) + 1);
 
         // save thread and message
         $this->tm->saveThread($thread, false);
         $this->saveMessage($message);
+
+        $thread->setUnreadCountFor($recipient, $this->getUserUnreadCount($recipient, $thread));
+        $this->tm->saveThread($thread);
 
         if ($this->eventDispacher) {
             $this->eventDispacher->dispatch(MessageEvents::MESSAGE_SEND, new MessageEvent($message));
