@@ -1,11 +1,16 @@
 services:
+    btn_message.helper.message:
+        class: Btn\MessageBundle\Helper\MessageHelper
+        arguments:
+            - %btn_message.message_type%
+
     btn_message.message_manager.default:
         class: Btn\MessageBundle\Model\MessageManager
         arguments:
             - @doctrine.orm.entity_manager
             - %btn_message.message_class%
             - @btn_message.thread_manager
-            - %btn_message.message_type%
+            - @btn_message.helper.message
         calls:
             - [setEventDispacher, ["@event_dispatcher"]]
 
@@ -23,6 +28,6 @@ services:
     btn.twig.message_extension:
         class: Btn\MessageBundle\Twig\BtnMessageExtension
         arguments:
-            - @btn_message.message_manager
+            - @btn_message.helper.message
         tags:
             - { name: twig.extension }

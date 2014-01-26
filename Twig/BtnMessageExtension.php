@@ -2,19 +2,19 @@
 
 namespace Btn\MessageBundle\Twig;
 
-use Btn\MessageBundle\Model\MessageManager;
+use Btn\MessageBundle\Helper\MessageHelper;
 
 class BtnMessageExtension extends \Twig_Extension
 {
     /**
      * Message Manager
-     * @var \Btn\MessageBundle\Model\MessageManager
+     * @var \Btn\MessageBundle\Helper\MessageHelper
      */
-    protected $mm;
+    protected $mh;
 
-    public function __construct(MessageManager $mm)
+    public function __construct(MessageHelper $mh)
     {
-        $this->mm = $mm;
+        $this->mh = $mh;
     }
 
     /**
@@ -32,7 +32,7 @@ class BtnMessageExtension extends \Twig_Extension
      */
     public function getTypeKey($type)
     {
-        return $this->mm->getTypeKey($type);
+        return $this->mh->getTypeKey($type);
     }
 
     /**

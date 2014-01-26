@@ -13,6 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Btn\MessageBundle\MessageEvents;
 use Btn\MessageBundle\Event\MessageEvent;
+use Btn\MessageBundle\Helper\MessageHelper;
 
 class MessageManager
 {
@@ -37,9 +38,9 @@ class MessageManager
     protected $tm;
 
     /**
-     * @var array
+     * @var \Btn\MessageBundle\Helper\MessageHelper
      */
-    protected $messageType;
+    protected $mh;
 
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
@@ -55,15 +56,15 @@ class MessageManager
      * @param EntityManager $em
      * @param string        $entityName
      * @param ThreadManager $tm
-     * @param array         $messageType
+     * @param MessageHelper $mh
      */
-    public function __construct(EntityManager $em, $entityName, ThreadManager $tm, array $messageType = null)
+    public function __construct(EntityManager $em, $entityName, ThreadManager $tm, MessageHelper $mh)
     {
         $this->em         = $em;
         $this->repo       = $em->getRepository($entityName);
         $this->entityName = $em->getClassMetadata($entityName)->name;
         $this->tm         = $tm;
-        $this->messageType = $messageType;
+        $this->mh         = $mh;
     }
 
     /**
@@ -133,7 +134,7 @@ class MessageManager
      */
     public function getMessageType()
     {
-        return $this->messageType;
+        return $this->mh->getMessageType();
     }
 
     /**
@@ -353,16 +354,7 @@ class MessageManager
      */
     public function getTypeId($input)
     {
-        if (!is_null($input) && $this->messageType) {
-            foreach ($this->messageType as $key => $type) {
-                if ($key === $input || (is_numeric($input) && $input == $type['id'])) {
-                    return $type['id'];
-                }
-            }
-            throw new \Exception("Message type for $input haven't been found");
-        }
-
-        return null;
+        return $this->mh->getTypeId($input);
     }
 
     /**
@@ -373,16 +365,7 @@ class MessageManager
      */
     public function getTypeKey($input)
     {
-        if (!is_null($input) && $this->messageType) {
-            foreach ($this->messageType as $key => $type) {
-                if ($key === $input || (is_numeric($input) && $input == $type['id'])) {
-                    return $key;
-                }
-            }
-            throw new \Exception("Message type for $input haven't been found");
-        }
-
-        return null;
+        return $this->mh->getTypeKey($input);
     }
 
     /**
