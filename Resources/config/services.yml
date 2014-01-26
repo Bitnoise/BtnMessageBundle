@@ -8,15 +8,18 @@ services:
             - %btn_message.message_type%
         calls:
             - [setEventDispacher, ["@event_dispatcher"]]
+
     btn_message.thread_manager.default:
         class: Btn\MessageBundle\Model\ThreadManager
         arguments:
             - @doctrine.orm.entity_manager
             - %btn_message.thread_class%
+
     btn_message.message.type:
         class: Btn\MessageBundle\Form\MessageType
         arguments:
             - %btn_message.message_type%
+
     btn.twig.message_extension:
         class: Btn\MessageBundle\Twig\BtnMessageExtension
         arguments:
