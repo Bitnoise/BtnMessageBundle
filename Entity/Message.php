@@ -8,6 +8,8 @@ use FOS\UserBundle\Model\UserInterface;
 
 /**
  * Message abstract class
+ *
+ * @ORM\MappedSuperclass()
  */
 abstract class Message extends Base
 {

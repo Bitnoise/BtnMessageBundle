@@ -8,6 +8,8 @@ use FOS\UserBundle\Model\UserInterface;
 
 /**
  * Thread abstract class
+ *
+ * @ORM\MappedSuperclass()
  */
 abstract class Thread extends Base
 {
