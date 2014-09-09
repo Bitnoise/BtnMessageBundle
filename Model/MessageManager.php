@@ -150,6 +150,7 @@ class MessageManager
         $thread->setSubject($message->getSubject());
         $thread->setBody($message->getBody());
         $thread->setType($message->getType());
+        $thread->setLastMessage($message);
         $thread->updated();
         $recipient = $message->getRecipient();
 
@@ -202,8 +203,6 @@ class MessageManager
         if (null !== $metadata) {
             $message->setMetadata($metadata);
         }
-
-        $thread->setLastMessage($message);
 
         return $this->send($message);
     }
