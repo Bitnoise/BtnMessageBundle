@@ -72,6 +72,28 @@ class ThreadManager
     }
 
     /**
+     * @param UserInterface $user
+     * @param bool $isArchive
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getUserThreadsQueryQueryBuilder(UserInterface $user, $isArchive = false)
+    {
+        $qb = $this->em->createQueryBuilder();
+
+        $qb
+            ->from($this->entityName, 't')
+            ->select('t')
+            ->join('t.participants', 'p', 'WITH', 'p.id = :user')
+            ->where('t.isArchive = :isArchive')
+            ->setParameter('user', $user)
+            ->setParameter('isArchive', $isArchive)
+            ->orderBy('t.updatedAt', 'DESC')
+        ;
+
+        return $qb;
+    }
+
+    /**
      * Get user threads
      *
      * @param UserInterface $user
@@ -81,13 +103,8 @@ class ThreadManager
      */
     public function getUserThreadsQuery(UserInterface $user, $isArchive = false)
     {
-        $query = $this->em->createQuery(
-            "SELECT t FROM $this->entityName t "
-            . " JOIN t.participants p WITH p.id = :user "
-            . " WHERE t.isArchive = :isArchive "
-            . " ORDER BY t.updatedAt DESC "
-        );
-        $query->setParameters(array(':user' =>$user, ':isArchive' => $isArchive));
+        $qb    = $this->getUserThreadsQueryQueryBuilder($user, $isArchive);
+        $query = $qb->getQuery();
 
         return $query;
     }
