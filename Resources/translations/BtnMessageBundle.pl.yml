@@ -1,5 +1,4 @@
-form:
-    subject: "Temat"
-    body: "Wiadomość"
-    type: "Rodzaj wiadomości"
-    send: "Wyślij wiadomość"
+form.subject: "Temat"
+form.body: "Wiadomość"
+form.type: "Rodzaj wiadomości"
+form.send: "Wyślij wiadomość"
