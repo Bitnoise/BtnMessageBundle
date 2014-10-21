@@ -5,6 +5,7 @@ namespace Btn\MessageBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Message abstract class
@@ -65,6 +66,7 @@ abstract class Message extends Base
     /**
      * @var Metadata
      *
+     * @Assert\Valid()
      * @ORM\Column(name="metadata", type="object", nullable=true)
      */
     protected $metadata;
