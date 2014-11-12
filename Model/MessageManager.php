@@ -118,6 +118,14 @@ class MessageManager
     }
 
     /**
+     * Get repository
+     */
+    public function getRepository()
+    {
+        return $this->repo;
+    }
+
+    /**
      * Get Thread Manager
      *
      * @return ThreadManager

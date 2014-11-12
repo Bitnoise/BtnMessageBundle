@@ -72,6 +72,14 @@ class ThreadManager
     }
 
     /**
+     * Get repository
+     */
+    public function getRepository()
+    {
+        return $this->repo;
+    }
+
+    /**
      * @param UserInterface $user
      * @param bool $isArchive
      * @return \Doctrine\ORM\QueryBuilder
