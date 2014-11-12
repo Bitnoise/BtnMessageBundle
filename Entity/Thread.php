@@ -11,7 +11,7 @@ use FOS\UserBundle\Model\UserInterface;
  *
  * @ORM\MappedSuperclass()
  */
-abstract class Thread extends Base
+abstract class Thread extends Base implements ThreadInterface
 {
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
